@@ -33,6 +33,11 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
+// Root route - so Render doesn't show "Cannot GET /"
+app.get('/', (req, res) => {
+  res.redirect('https://marreonline0201.github.io/SBUhack2026');
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
