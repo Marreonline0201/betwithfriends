@@ -16,14 +16,11 @@ Opens at http://localhost:3000
 
 ## Deploy to Render (One URL for Everything)
 
-1. Go to [render.com](https://render.com) → **New** → **Web Service**
-2. Connect repo `Marreonline0201/SBUhack2026`
-3. Settings:
+1. Go to [render.com](https://render.com) → your service → **Settings**
+2. Set:
    - **Root Directory**: leave empty
-   - **Build Command**: `npm install && npm run build`
+   - **Build Command**: `npm install && bash build.sh`
    - **Start Command**: `npm run server`
-4. Deploy
+3. **Manual Deploy** → **Deploy latest commit**
 
-**Your app will be live at:** https://sbuhack2026.onrender.com
-
-No GitHub Pages needed. No secrets. One deployment.
+If you see "Build missing", check the **Build logs** in Render. The client build must complete. Free tier may need 2–3 minutes for `npm run build`.

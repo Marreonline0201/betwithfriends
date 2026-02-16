@@ -35,12 +35,22 @@ app.get('/api/health', (req, res) => {
 
 // Serve React app (production build)
 const buildPath = path.join(__dirname, '..', 'client', 'build');
-app.use(express.static(buildPath));
+const indexPath = path.join(buildPath, 'index.html');
 
-// SPA fallback - serve index.html for all non-API routes
-app.get('*', (req, res) => {
-  res.sendFile(path.join(buildPath, 'index.html'));
-});
+if (require('fs').existsSync(indexPath)) {
+  app.use(express.static(buildPath));
+  app.get('*', (req, res) => {
+    res.sendFile(indexPath);
+  });
+} else {
+  app.get('*', (req, res) => {
+    res.status(500).send(`
+      <h1>Build missing</h1>
+      <p>Client build not found. Check Render build logs.</p>
+      <p>Build command should be: <code>npm install && npm run build</code></p>
+    `);
+  });
+}
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
