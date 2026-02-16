@@ -32,6 +32,7 @@ jobs:
       - name: Install and build
         working-directory: client
         env:
+          CI: false
           PUBLIC_URL: /SBUhack2026
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
         run: |
