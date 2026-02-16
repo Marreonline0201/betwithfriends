@@ -89,8 +89,8 @@ The frontend deploys to GitHub Pages automatically when you push to `main`. The 
 
 1. Repo → **Settings** → **Pages**
 2. **Source**: Deploy from a branch
-3. **Branch**: gh-pages (select from dropdown; it's created by the workflow on first push)
-4. **Folder**: / (root)
+3. **Branch**: main
+4. **Folder**: **/docs**
 5. Save
 
 ### Step 4: Push to deploy
@@ -106,7 +106,7 @@ Push to `main`. The workflow will build and deploy. Your site will be at:
 | **Blank page** | 1. Add `REACT_APP_API_URL` secret (repo → Settings → Secrets → Actions). Value: `https://your-render-url.onrender.com/api`<br>2. Deploy the backend to Render first |
 | **Login/Signup fails** | Backend not reachable. Deploy to Render and add the URL as `REACT_APP_API_URL` secret |
 | **404 when refreshing** | Should be fixed. If not, ensure the workflow ran and deployed successfully |
-| **Workflow fails** | Repo → Settings → Pages → Source must be **Deploy from a branch**, Branch: **gh-pages** |
+| **Workflow fails** | Repo → Settings → Pages → Source: **Deploy from a branch**, Branch: **main**, Folder: **/docs** |
 
 **Check workflow status:** Repo → Actions tab → click the latest "Deploy to GitHub Pages" run to see any errors.
 

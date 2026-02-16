@@ -3,6 +3,11 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - 'README.md'
+      - '**.md'
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -30,8 +35,17 @@ jobs:
       - name: Add 404.html for SPA routing
         run: cp Test/client/build/index.html Test/client/build/404.html
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: Test/client/build
+      # Deploy to docs folder (no gh-pages branch needed)
+      - name: Copy build to docs
+        run: |
+          rm -rf docs
+          cp -r Test/client/build docs
+
+      - name: Deploy to main branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs
+          git status
+          git diff --staged --quiet || git commit -m "Deploy to GitHub Pages"
+          git push
