@@ -97,6 +97,18 @@ Push to `main`. The workflow will build and deploy. Your site will be at:
 
 **https://marreonline0201.github.io/SBUhack2026**
 
+### Troubleshooting "Not Working"
+
+| Problem | Fix |
+|--------|-----|
+| **Blank page** | 1. Add `REACT_APP_API_URL` secret (repo → Settings → Secrets → Actions). Value: `https://your-render-url.onrender.com/api`<br>2. Deploy the backend to Render first |
+| **Login/Signup fails** | Backend not reachable. Deploy to Render and add the URL as `REACT_APP_API_URL` secret |
+| **404 when refreshing** | Should be fixed. If not, ensure the workflow ran and deployed successfully |
+| **Workflow fails** | Repo → Settings → Pages → Source must be **GitHub Actions** (not "Deploy from a branch") |
+| **"pages" environment error** | Go to Settings → Pages → set Source to **GitHub Actions**. This creates the required environment |
+
+**Check workflow status:** Repo → Actions tab → click the latest "Deploy to GitHub Pages" run to see any errors.
+
 ---
 
 ## How It Works
