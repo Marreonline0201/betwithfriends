@@ -31,10 +31,10 @@ The build is committed to the repo, so Render only needs `npm install`. When you
 
 To also deploy to https://marreonline0201.github.io/SBUhack2026:
 
-1. **Add secret**: Repo → Settings → Secrets → New secret  
+1. **Add secret**: Repo → Settings → Secrets and variables → Actions → New secret  
    - Name: `REACT_APP_API_URL`  
    - Value: `https://sbuhack2026.onrender.com/api`
 
-2. **Enable Pages**: Settings → Pages → Source: **Deploy from a branch** → Branch: **main** → Folder: **/docs**
+2. **Enable Pages**: Settings → Pages → Build and deployment → Source: **GitHub Actions**
 
 3. **Trigger deploy**: Actions → Deploy to GitHub Pages → **Run workflow**

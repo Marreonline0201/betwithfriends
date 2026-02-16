@@ -4,17 +4,23 @@ on:
   push:
     branches: [main]
     paths-ignore:
-      - 'docs/**'
       - 'README.md'
       - '**.md'
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    environment: pages
     steps:
       - uses: actions/checkout@v4
 
@@ -32,22 +38,20 @@ jobs:
           npm install
           npm run build
 
-      # Fix: 404 on refresh for React Router
       - name: Add 404.html for SPA routing
         run: cp client/build/index.html client/build/404.html
 
-      # Deploy to docs folder
-      - name: Copy build to docs
-        run: |
-          rm -rf docs
-          cp -r client/build docs
-          touch docs/.nojekyll
+      - name: Add .nojekyll
+        run: touch client/build/.nojekyll
 
-      - name: Deploy to main branch
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs
-          git status
-          git diff --staged --quiet || git commit -m "Deploy to GitHub Pages"
-          git push
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: client/build
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
