@@ -24,7 +24,7 @@ function PublicRoute({ children }) {
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <BrowserRouter basename={process.env.PUBLIC_URL || ''}>
         <Routes>
           <Route
             path="/login"

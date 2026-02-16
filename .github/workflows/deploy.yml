@@ -26,6 +26,7 @@ jobs:
       - name: Install and build
         working-directory: client
         env:
+          PUBLIC_URL: /SBUhack2026
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
         run: |
           npm install
@@ -35,11 +36,12 @@ jobs:
       - name: Add 404.html for SPA routing
         run: cp client/build/index.html client/build/404.html
 
-      # Deploy to docs folder (no gh-pages branch needed)
+      # Deploy to docs folder
       - name: Copy build to docs
         run: |
           rm -rf docs
           cp -r client/build docs
+          touch docs/.nojekyll
 
       - name: Deploy to main branch
         run: |
