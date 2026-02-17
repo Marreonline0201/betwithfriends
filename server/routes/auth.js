@@ -118,25 +118,40 @@ router.post('/signup', (req, res) => {
 
 // Log in
 router.post('/login', (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
-    return res.status(400).json({ error: 'Email and password are required' });
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password are required' });
+    }
+
+    const db = getDb();
+    let user;
+    try {
+      user = db.prepare(
+        'SELECT id, email, password_hash, name FROM users WHERE email = ? AND (oauth_provider IS NULL OR oauth_provider = "")'
+      ).get(email.toLowerCase());
+    } catch (dbErr) {
+      user = db.prepare(
+        'SELECT id, email, password_hash, name FROM users WHERE email = ?'
+      ).get(email.toLowerCase());
+      if (user && user.oauth_provider) {
+        return res.status(401).json({ error: 'This account uses Google/Facebook sign-in' });
+      }
+    }
+
+    if (!user || !user.password_hash || !bcrypt.compareSync(password, user.password_hash)) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    const token = jwt.sign({ userId: user.id }, JWT_SECRET);
+    res.json({
+      token,
+      user: { id: user.id, email: user.email, name: user.name }
+    });
+  } catch (err) {
+    console.error('Login error:', err);
+    res.status(500).json({ error: err.message || 'Login failed' });
   }
-
-  const db = getDb();
-  const user = db.prepare(
-    'SELECT id, email, password_hash, name FROM users WHERE email = ? AND (oauth_provider IS NULL OR oauth_provider = "")'
-  ).get(email.toLowerCase());
-
-  if (!user || !bcrypt.compareSync(password, user.password_hash)) {
-    return res.status(401).json({ error: 'Invalid email or password' });
-  }
-
-  const token = jwt.sign({ userId: user.id }, JWT_SECRET);
-  res.json({
-    token,
-    user: { id: user.id, email: user.email, name: user.name }
-  });
 });
 
 // OAuth - Google

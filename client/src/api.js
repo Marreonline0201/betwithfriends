@@ -20,11 +20,16 @@ async function request(endpoint, options = {}) {
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const res = await fetch(`${API_URL}${endpoint}`, { ...options, headers });
+  let res;
+  try {
+    res = await fetch(`${API_URL}${endpoint}`, { ...options, headers });
+  } catch (err) {
+    throw new Error(err.message || 'Network error - check if the server is running');
+  }
   const data = await res.json().catch(() => ({}));
 
   if (!res.ok) {
-    throw new Error(data.error || 'Request failed');
+    throw new Error(data.error || `Request failed (${res.status})`);
   }
   return data;
 }
