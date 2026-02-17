@@ -37,9 +37,9 @@ The build is committed to the repo, so Render only needs `npm install`. When you
 Add these env vars in Render → Environment:
 - `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` – from [Google Cloud Console](https://console.cloud.google.com/)
 - `FACEBOOK_APP_ID`, `FACEBOOK_APP_SECRET` – from [Meta Developers](https://developers.facebook.com/)
-- `API_URL` – your Render URL (e.g. `https://sbuhack2026.onrender.com`)
-- `REACT_APP_RENDER_URL` – same, for client builds (if your Render service has a different URL than `sbuhack2026.onrender.com`)
-- `FRONTEND_URL` – same as API_URL if using Render for frontend
+- `API_URL` – your Render URL (e.g. `https://sbuhack2026.onrender.com`) – use just the hostname or full URL
+- `FRONTEND_URL` – same (e.g. `https://sbuhack2026.onrender.com`) – **don’t double the protocol** (wrong: `https://https://...`)
+- `REACT_APP_RENDER_URL` – same, for client builds (if your Render service has a different URL)
 
 ### Optional: Forgot password email
 

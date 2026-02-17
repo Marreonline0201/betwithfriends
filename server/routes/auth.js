@@ -11,8 +11,18 @@ const { authMiddleware, JWT_SECRET } = require('../middleware/auth');
 
 const router = express.Router();
 const OAUTH_PLACEHOLDER = bcrypt.hashSync('oauth', 10);
-const FRONTEND_URL = process.env.FRONTEND_URL ||
-  (process.env.RENDER_EXTERNAL_URL ? `https://${process.env.RENDER_EXTERNAL_URL}` : null) ||
+
+// Ensure URL has protocol (strip duplicates/malformed to avoid https://https://... or https//...)
+function ensureUrl(url) {
+  if (!url || typeof url !== 'string') return null;
+  let cleaned = url.trim();
+  while (/^https?:\/\/?|^https?\/\//i.test(cleaned)) {
+    cleaned = cleaned.replace(/^https?:\/\/?|^https?\/\//i, '');
+  }
+  return cleaned ? `https://${cleaned}` : null;
+}
+const FRONTEND_URL = ensureUrl(process.env.FRONTEND_URL) ||
+  ensureUrl(process.env.RENDER_EXTERNAL_URL) ||
   'http://localhost:3000';
 
 // Configure Passport
@@ -24,8 +34,9 @@ passport.deserializeUser((id, done) => {
 });
 
 const getApiUrl = () => {
-  if (process.env.API_URL) return process.env.API_URL;
-  if (process.env.RENDER_EXTERNAL_URL) return `https://${process.env.RENDER_EXTERNAL_URL}`;
+  if (process.env.API_URL) return ensureUrl(process.env.API_URL) || process.env.API_URL;
+  const renderUrl = ensureUrl(process.env.RENDER_EXTERNAL_URL);
+  if (renderUrl) return renderUrl;
   return 'http://localhost:5000';
 };
 
