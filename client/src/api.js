@@ -1,11 +1,15 @@
-// API URL: env var, or infer from host
-const RENDER_API = 'https://sbuhack2026.onrender.com/api';
+// API URL – update RENDER_API_BASE if your Render service has a different URL
+// (Check Render dashboard: your service URL is https://YOUR-SERVICE-NAME.onrender.com)
+const RENDER_API_BASE = process.env.REACT_APP_RENDER_URL || 'https://sbuhack2026.onrender.com';
+const RENDER_API = `${RENDER_API_BASE}/api`;
+const RENDER_HOST = RENDER_API_BASE.replace(/^https?:\/\//, '');
+
 function getApiUrl() {
   if (process.env.REACT_APP_API_URL) return process.env.REACT_APP_API_URL;
   if (typeof window === 'undefined') return RENDER_API;
   if (window.location.port === '3000') return 'http://localhost:5000/api';
   // Same origin on Render backend
-  if (window.location.hostname === 'sbuhack2026.onrender.com') return '/api';
+  if (window.location.hostname === RENDER_HOST) return '/api';
   // Any other host (GitHub Pages, other domains): use full Render API URL
   return RENDER_API;
 }
