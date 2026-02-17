@@ -157,7 +157,6 @@ router.post('/login', (req, res) => {
 
 // OAuth - Google
 if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
-  const apiUrl = process.env.API_URL || (process.env.RENDER_EXTERNAL_URL ? `https://${process.env.RENDER_EXTERNAL_URL}` : 'http://localhost:5000');
   router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'], session: false }));
   router.get('/google/callback', (req, res, next) => {
     passport.authenticate('google', { session: false }, (err, user) => {
@@ -167,6 +166,8 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
       res.redirect(`${FRONTEND_URL}/auth/callback?token=${token}`);
     })(req, res, next);
   });
+} else {
+  router.get('/google', (req, res) => res.redirect(`${FRONTEND_URL}/login?error=${encodeURIComponent('Google sign-in is not configured. Add GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET to Render.')}`));
 }
 
 // OAuth - Facebook
@@ -180,6 +181,8 @@ if (process.env.FACEBOOK_APP_ID && process.env.FACEBOOK_APP_SECRET) {
       res.redirect(`${FRONTEND_URL}/auth/callback?token=${token}`);
     })(req, res, next);
   });
+} else {
+  router.get('/facebook', (req, res) => res.redirect(`${FRONTEND_URL}/login?error=${encodeURIComponent('Facebook sign-in is not configured. Add FACEBOOK_APP_ID and FACEBOOK_APP_SECRET to Render.')}`));
 }
 
 // Forgot password
