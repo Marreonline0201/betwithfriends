@@ -1,5 +1,8 @@
 I want to make an website that a couple or friends can bet in a game. They will choose the game and this website only will help the user to show what they bet and how many games each users won
 1. Log in/Sign in
+- Also use google, meta, x, etc
+- Should be able to change password
+
 2. Main function
 - Add/Delete user
 - Add/Delete bet
