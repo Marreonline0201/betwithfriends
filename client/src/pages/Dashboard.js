@@ -57,7 +57,7 @@ function Dashboard() {
         <form onSubmit={handleCreateGroup} className="form-row">
           <input
             type="text"
-            placeholder="Group name (e.g. Me & Sarah)"
+            placeholder="Group name (e.g. Me & Sophia)"
             value={newGroupName}
             onChange={(e) => setNewGroupName(e.target.value)}
           />
